@@ -1,0 +1,31 @@
+apply plugin: 'scala'
+apply plugin: 'application'
+
+version = '1.0-SNAPSHOT'
+
+mainClassName = 'nl.surfsara.sda.SparkWarcExample'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://beehub.nl/surfsara-repo/releases'
+    }
+}
+
+dependencies {
+    compileOnly 'org.scala-lang:scala-library:2.11.8'
+    compileOnly 'org.apache.spark:spark-core_2.11:2.1.1'
+    compile 'SURFsara:warcutils:1.2'
+    compile 'org.jwat:jwat-warc:1.1.0'
+}
+
+startScripts{
+    String scriptText = new File("src/main/resources/unix_startscript.template").text
+    unixStartScriptGenerator.template = resources.text.fromString(scriptText)
+    doLast{
+        delete windowsScript
+    }
+}
